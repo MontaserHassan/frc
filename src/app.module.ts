@@ -7,6 +7,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 // Modules
 import CustomerModule from './Modules/customer/customer.module';
+import UtilModule from './Modules/Utils/util.module';
+import NewsModule from './Modules/news/news.module';
+import ContactUsModule from './Modules/contact-us/contact-us.module';
 
 import AppController from './app.controller';
 import Constants from './Core/Constant/constant.constant';
@@ -19,7 +22,10 @@ import Constants from './Core/Constant/constant.constant';
     MongooseModule.forRoot(Constants.DB_URI),
     ScheduleModule.forRoot(),
     JwtModule.register({ secret: Constants.JWT_SECRET }),
+    UtilModule,
     CustomerModule,
+    NewsModule,
+    ContactUsModule,
   ],
   controllers: [AppController],
   providers: [],

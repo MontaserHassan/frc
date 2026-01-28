@@ -20,12 +20,12 @@ export default class TokenService {
         return createdToken;
     };
 
-    async findById(id: string): Promise<Token> {
+    async findById(id: string): Promise<Token | null> {
         const token = await this.tokenModel.findById(id).select('-__v -createdAt -updatedAt');
         return token;
     };
 
-    async findOne(filterData: FilterTokenDataDto): Promise<Token> {
+    async findOne(filterData: FilterTokenDataDto): Promise<Token | null> {
         const token = await this.tokenModel.findOne(filterData as Partial<Token>).select('-__v -createdAt -updatedAt');
         return token;
     };

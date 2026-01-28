@@ -2,7 +2,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
-import logger from 'src/Configs/logger.config';
+import logger from 'src/Config/logger.config';
 
 
 

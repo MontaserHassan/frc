@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Request, Response } from '@nestjs/common';
 
-import { ResponseInterface } from 'src/Core/Interfaces/response.interface';
+import type { ResponseInterface } from 'src/Core/Interfaces/response.interface';
 import { formatDate } from 'src/Core/helpers/helper-functions.helper';
 
 

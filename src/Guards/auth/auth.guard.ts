@@ -29,7 +29,7 @@ export default class AuthGuard implements CanActivate {
       const token = this.tokenUtil.extractToken(headerToken);
       if (!token) throw new CustomExceptionFilter("You are not allow to access this resource", HttpStatus.UNAUTHORIZED, ['']);
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET) as unknown as AuthCustomer;
+      const decoded = jwt.verify(token, String(process.env.JWT_SECRET)) as AuthCustomer;
       if (!decoded) throw new CustomExceptionFilter("You are not allow to access this resource", HttpStatus.UNAUTHORIZED, ['']);
 
       const hasTokenActive = await this.tokenUtil.hasTokenActiveByTokenId(decoded.tokenId);

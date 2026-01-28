@@ -34,18 +34,11 @@ class Customer {
 const CustomerSchema = SchemaFactory.createForClass(Customer);
 
 
-CustomerSchema.pre<CustomerDocument>('save', function (next: any) {
-    if (!this.isModified('password')) return next();
-
-    bcrypt.genSalt(10, (err, salt) => {
-        if (err) return next(err);
-
-        bcrypt.hash(this.password, salt, (err, hash) => {
-            if (err) return next(err);
-            this.password = hash;
-            next();
-        });
-    });
+CustomerSchema.pre<CustomerDocument>('save', async function () {
+    if (!this.isModified('password')) return;
+    if (!this.password) return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
 });
 
 
@@ -62,16 +55,16 @@ CustomerSchema.pre<CustomerDocument>('updateOne', function (next: any) {
 
 CustomerSchema.set('toJSON', {
     transform: function (doc, ret) {
-        delete ret.password;
-        return ret;
-    }
+        const { password, ...rest } = ret;
+        return rest;
+    },
 });
 
 
 CustomerSchema.set('toObject', {
     transform: function (doc, ret) {
-        delete ret.password;
-        return ret;
+        const { password, ...rest } = ret;
+        return rest;
     }
 });
 
@@ -80,5 +73,5 @@ CustomerSchema.set('toObject', {
 export {
     CustomerSchema,
     Customer,
-    CustomerDocument,
+    CustomerDocument
 };

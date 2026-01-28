@@ -6,7 +6,7 @@ import { MongoServerError } from 'mongodb';
 import CustomExceptionFilter from '../Error/error-exception.error';
 // import { CommonMessage } from '../../Messages/index.message';
 import { formatDate } from 'src/Core/helpers/helper-functions.helper';
-import logger from 'src/Configs/logger.config';
+import logger from 'src/Config/logger.config';
 import Constants from '../Constant/constant.constant';
 
 

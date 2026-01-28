@@ -29,20 +29,19 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new ValidationExceptionFilter());
+
   if (Constants.PROD) app.use(new LoggerMiddleware().use);
 
-  const config = new DocumentBuilder()
-    .setTitle('Mart Management System API')
-    .setDescription('API documentation for Mart Management System')
+  const documentConfig = new DocumentBuilder()
+    .setTitle('FRC Web API')
+    .setDescription('API documentation for FRC Web')
     .setVersion(Constants.VERSION)
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, documentConfig);
   SwaggerModule.setup('api-docs', app, document);
 
   const server = await app.listen(Constants.PORT);
   const address = server.address();
-
-  Logger.log(`Application Name is : ${Constants.APP_NAME}`, 'Bootstrap');
 
   Logger.verbose(
     `
@@ -57,20 +56,17 @@ async function bootstrap() {
     `,
     'FRC-WEB',
   );
-  Logger.log(`🚀 Application Name is: ${Constants.APP_NAME}`, 'AppName');
-  Logger.log(`⚙️  Server is listening on port: ${address.port}`, 'Port');
-  Logger.log(`🛠️  Application Version: ${Constants.VERSION}`, 'AppVersion');
-  Logger.log(`📅 Start Time: ${new Date().toLocaleString()}`, 'StartTime');
+  Logger.log(`🚀 🔑 Application Name is: ${Constants.APP_NAME}`, 'AppName');
+  Logger.log(`🔧 Environment: ${Constants.PROD ? 'Production' : 'Development'}`, 'Environment');
+  Logger.log(`⚙️ 🧩 Server is listening on port: ${address.port}`, 'Port');
+  Logger.log(`🛠️ 🏷️  Application Version: ${Constants.VERSION}`, 'AppVersion');
   Logger.log(`🌐 Application is running on: ${Constants.SERVER_URL}`, 'Server');
+  Logger.log(`⏱️ Start Time: ${new Date().toLocaleString()}`, 'StartTime');
+  Logger.log(`📅 First Running Time: ${new Date().toLocaleString()}`, 'FirstRunningTime');
   Logger.log(`🗄️  Connected to database: ${Constants.DB_URI}`, 'Database');
-  Logger.log(
-    `📚 Swagger documentation available at: ${Constants.DOMAIN}:${Constants.PORT}/api-docs`,
-    'Swagger',
-  );
-  Logger.log(
-    `🔧 Environment: ${Constants.PROD ? 'Production' : 'Development'}`,
-    'Environment',
-  );
+  Logger.log(`🧠 🔴 Redis Connection: ${Constants.REDIS_URL}`, 'Redis');
+  Logger.log(`📚  Swagger documentation available at: ${Constants.DOMAIN}:${Constants.PORT}/api-docs`, 'Swagger');
+
 };
 
 
