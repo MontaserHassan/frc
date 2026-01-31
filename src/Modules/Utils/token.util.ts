@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import TokenService from '../customer/token.service';
+import TokenService from '../user/repository/token.repository';
 
 
 
@@ -11,12 +11,12 @@ export default class TokenUtil {
 
     constructor(private readonly jwtService: JwtService, private readonly tokenService: TokenService) { };
 
-    async createToken(email: string, customerName: string, customerId: string): Promise<string> {
+    async createToken(email: string, userName: string, userId: string): Promise<string> {
         const tokenId = Math.floor(1000000000 + Math.random() * 9000000000);
         const expiryDate = this.calculateExpiryDate(Number(process.env.EXPIRATION_DATE_PER_MINUTES));
-        const payload = { email: email, customerName: customerName, customerId: customerId, tokenId: tokenId, expiryDate: expiryDate.date };
+        const payload = { email: email, userName: userName, userId: userId, tokenId: tokenId, expiryDate: expiryDate.date };
         const token = await this.jwtService.signAsync(payload, { expiresIn: expiryDate.expiryDurationPerSecond });
-        await this.tokenService.create({ tokenId: tokenId, customerId: customerId, expiryDate: expiryDate.date });
+        await this.tokenService.create({ tokenId: tokenId, userId: userId, expiryDate: expiryDate.date });
         return token;
     };
 
@@ -45,8 +45,8 @@ export default class TokenUtil {
         return { date: date, expiryDurationPerSecond: expiryDurationPerSecond };
     };
 
-    async hasTokenActiveByCustomerId(id: string) {
-        const token = await this.tokenService.findOne({ customerId: id, active: true, expiryDate: { $gt: new Date() } });
+    async hasTokenActiveByUserId(id: string) {
+        const token = await this.tokenService.findOne({ userId: id, active: true, expiryDate: { $gt: new Date() } });
         return token;
     };
 
@@ -60,8 +60,8 @@ export default class TokenUtil {
         return token;
     };
 
-    async deleteTokensByCustomerId(customerId: string): Promise<boolean> {
-        const tokens = await this.tokenService.removeMany(customerId);
+    async deleteTokensByUserId(userId: string): Promise<boolean> {
+        const tokens = await this.tokenService.removeMany(userId);
         return tokens ? true : false;
     };
 

@@ -5,22 +5,25 @@ import * as bcrypt from 'bcryptjs';
 
 
 
-type CustomerDocument = Customer & Document;
+type UserDocument = User & Document;
 
 
 @Schema({ timestamps: true })
-class Customer {
+class User {
     @Prop({ type: String, required: true })
     firstName: string;
 
     @Prop({ type: String, required: true })
     lastName: string;
 
-    @Prop({ type: String, required: true, })
-    customerName: string;
+    @Prop({ type: String, required: true })
+    userName: string;
 
-    @Prop({ type: Object, required: true, unique: true, })
-    phoneNumber: object;
+    @Prop({ type: String, required: true, })
+    countryCode: string;
+
+    @Prop({ type: String, required: true, })
+    phoneNumber: string;
 
     @Prop({ type: String, required: true, unique: true, })
     email: string;
@@ -28,13 +31,20 @@ class Customer {
     @Prop({ type: String, required: true })
     password: string;
 
+    @Prop({ type: String, required: false, enum: ['form', 'google', 'facebook', 'linkedin'], default: 'form', })
+    provider: 'form' | 'google' | 'facebook' | 'linkedin';
+
+    @Prop({ type: String, required: false })
+    providerId: string;
 };
 
 
-const CustomerSchema = SchemaFactory.createForClass(Customer);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.index({ countryCode: 1, phoneNumber: 1 }, { unique: true });
 
 
-CustomerSchema.pre<CustomerDocument>('save', async function () {
+UserSchema.pre<UserDocument>('save', async function () {
     if (!this.isModified('password')) return;
     if (!this.password) return;
     const salt = await bcrypt.genSalt(10);
@@ -42,18 +52,18 @@ CustomerSchema.pre<CustomerDocument>('save', async function () {
 });
 
 
-CustomerSchema.pre<CustomerDocument>('findOneAndUpdate', function (next: any) {
+UserSchema.pre<UserDocument>('findOneAndUpdate', function (next: any) {
     this.set({ updatedAt: new Date() });
     next();
 });
 
-CustomerSchema.pre<CustomerDocument>('updateOne', function (next: any) {
+UserSchema.pre<UserDocument>('updateOne', function (next: any) {
     this.set({ updatedAt: new Date() });
     next();
 });
 
 
-CustomerSchema.set('toJSON', {
+UserSchema.set('toJSON', {
     transform: function (doc, ret) {
         const { password, ...rest } = ret;
         return rest;
@@ -61,7 +71,7 @@ CustomerSchema.set('toJSON', {
 });
 
 
-CustomerSchema.set('toObject', {
+UserSchema.set('toObject', {
     transform: function (doc, ret) {
         const { password, ...rest } = ret;
         return rest;
@@ -71,7 +81,7 @@ CustomerSchema.set('toObject', {
 
 
 export {
-    CustomerSchema,
-    Customer,
-    CustomerDocument
+    UserSchema,
+    User,
+    UserDocument
 };

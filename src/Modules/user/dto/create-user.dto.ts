@@ -1,20 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsEmail, IsNotEmpty, Matches, MinLength, MaxLength, IsOptional, ValidateNested, } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { IsString, IsEmail, IsNotEmpty, Matches, MinLength, MaxLength, IsOptional, IsNumberString, } from 'class-validator';
+import { Transform, } from 'class-transformer';
 
 
 
-class PhoneNumberDto {
-    @IsString({ message: 'Country code must be a string' })
-    @IsNotEmpty({ message: 'Country code is required' })
-    countryCode: string;
-
-    @IsString({ message: 'Phone number must be a string' })
-    @IsNotEmpty({ message: 'Phone number is required' })
-    phoneNumber: string;
-};
-
-export default class CreateCustomerDto {
+export default class CreateUserDto {
     @IsString({ message: 'First name must be a string' })
     @IsNotEmpty({ message: 'First name is required' })
     @MinLength(1, { message: 'First name must be at least 1 characters long', })
@@ -33,7 +23,7 @@ export default class CreateCustomerDto {
 
     @IsString({})
     @IsOptional({})
-    customerName: string;
+    userName: string;
 
     @IsEmail({}, { message: 'Invalid email address' })
     @IsNotEmpty({ message: 'Email is required' })
@@ -41,10 +31,15 @@ export default class CreateCustomerDto {
     @Transform(({ value }) => value.trim().toLowerCase())
     email: string;
 
-    @ValidateNested({ each: true })
-    @Type(() => PhoneNumberDto)
+    @IsString({ message: 'Country code must be a string' })
+    @IsNotEmpty({ message: 'Country code is required' })
+    @Matches(/^\+[\d]{1,3}$/, { message: 'Country code must start with "+" and contain 1 to 3 digits' })
+    countryCode: string;
+
+    @IsNumberString({})
     @IsNotEmpty({ message: 'Phone number is required' })
-    phoneNumber: PhoneNumberDto;
+    @Matches(/^\+[\d]{10,15}$/, { message: 'Phone number must start with "+" and contain 10 to 15 digits' })
+    phoneNumber: string;
 
     @IsString()
     @IsNotEmpty({ message: 'Password is required' })

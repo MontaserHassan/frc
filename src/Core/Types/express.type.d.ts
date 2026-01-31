@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import AuthCustomer from "../Interfaces/customer.interface";
+import AuthUser from "../Interfaces/user.interface";
 
 
 declare global {
     namespace Express {
         interface Request {
-            user?: AuthCustomer;
+            user?: AuthUser;
             requestNumberTrace: string;
         };
         interface Response {

@@ -5,13 +5,13 @@ import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 import TokenUtil from 'src/Modules/Utils/token.util';
-import AuthCustomer from 'src/Core/Interfaces/customer.interface';
+import AuthUser from 'src/Core/Interfaces/user.interface';
 import CustomExceptionFilter from 'src/Core/Error/error-exception.error';
 
 
 
 @Injectable()
-export default class AuthGuard implements CanActivate {
+export default class JwtAuthGuard implements CanActivate {
 
   constructor(private readonly tokenUtil: TokenUtil) { };
 
@@ -29,7 +29,7 @@ export default class AuthGuard implements CanActivate {
       const token = this.tokenUtil.extractToken(headerToken);
       if (!token) throw new CustomExceptionFilter("You are not allow to access this resource", HttpStatus.UNAUTHORIZED, ['']);
 
-      const decoded = jwt.verify(token, String(process.env.JWT_SECRET)) as AuthCustomer;
+      const decoded = jwt.verify(token, String(process.env.JWT_SECRET)) as AuthUser;
       if (!decoded) throw new CustomExceptionFilter("You are not allow to access this resource", HttpStatus.UNAUTHORIZED, ['']);
 
       const hasTokenActive = await this.tokenUtil.hasTokenActiveByTokenId(decoded.tokenId);
@@ -40,12 +40,12 @@ export default class AuthGuard implements CanActivate {
       };
 
       request.user = {
-        customerName: decoded.customerName,
+        userName: decoded.userName,
         email: decoded.email,
-        customerId: decoded.customerId,
+        userId: decoded.userId,
         tokenId: decoded.tokenId,
         expiryDate: decoded.expiryDate,
-      } as AuthCustomer;
+      } as AuthUser;
 
       return true;
     } catch (error) {

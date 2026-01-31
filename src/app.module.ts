@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ScheduleModule } from '@nestjs/schedule';
 
 // Modules
-import CustomerModule from './Modules/customer/customer.module';
+import UserModule from './Modules/user/user.module';
 import UtilModule from './Modules/Utils/util.module';
 import NewsModule from './Modules/news/news.module';
 import ContactUsModule from './Modules/contact-us/contact-us.module';
@@ -23,7 +23,7 @@ import Constants from './Core/Constant/constant.constant';
     ScheduleModule.forRoot(),
     JwtModule.register({ secret: Constants.JWT_SECRET }),
     UtilModule,
-    CustomerModule,
+    UserModule,
     NewsModule,
     ContactUsModule,
   ],

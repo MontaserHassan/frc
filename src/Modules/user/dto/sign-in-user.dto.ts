@@ -4,7 +4,7 @@ import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 
 
 
-export default class SignInCustomerDto {
+export default class SignInUserDto {
     @IsEmail({}, { message: 'Invalid email address' })
     @IsNotEmpty({ message: 'Email is required' })
     @Transform(({ value }) => value.trim().toLowerCase())

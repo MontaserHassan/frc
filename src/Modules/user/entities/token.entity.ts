@@ -13,7 +13,7 @@ class Token {
   tokenId: number;
 
   @Prop({ type: String, required: true })
-  customerId: string;
+  userId: string;
 
   @Prop({ required: true, default: true })
   active: boolean;

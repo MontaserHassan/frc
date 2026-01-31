@@ -3,15 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { Token, TokenDocument } from './entities/token.entity';
-import CreateTokenDto from './dto/create-token.dto';
-import FilterTokenDataDto from './dto/filter-data-token.dto';
-import UpdateTokenDto from './dto/update-token.dto';
+import { Token, TokenDocument } from '../entities/token.entity';
+import CreateTokenDto from '../dto/create-token.dto';
+import FilterTokenDataDto from '../dto/filter-data-token.dto';
+import UpdateTokenDto from '../dto/update-token.dto';
 
 
 
 @Injectable()
-export default class TokenService {
+export default class TokenRepository {
 
     constructor(@InjectModel(Token.name) private tokenModel: Model<TokenDocument>) { };
 

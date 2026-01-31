@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-export default interface AuthCustomer {
+export default interface AuthUser {
     email: string;
-    customerName: string;
-    customerId: string;
+    userName: string;
+    userId: string;
     tokenId: number;
     expiryDate: Date;
 };

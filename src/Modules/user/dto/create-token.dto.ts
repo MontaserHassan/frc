@@ -6,8 +6,8 @@ import { IsString, IsNotEmpty, IsDate, IsNumber } from 'class-validator';
 export default class CreateTokenDto {
 
     @IsString()
-    @IsNotEmpty({ message: 'Customer Id is required' })
-    readonly customerId: string;
+    @IsNotEmpty({ message: 'user Id is required' })
+    readonly userId: string;
 
     @IsNumber()
     @IsNotEmpty({ message: 'Token Id is required' })
