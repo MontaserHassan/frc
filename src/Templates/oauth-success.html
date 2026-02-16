@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login Successful</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f5f5f5; }
+    .box { background: white; padding: 40px; border-radius: 8px; text-align: center; }
+    .token { margin-top: 20px; word-break: break-all; color: green; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login Successful!</h2>
+    <p>Welcome, <span id="name"></span>!</p>
+    <p>Your token:</p>
+    <p class="token" id="token"></p>
+  </div>
+
+  <script>
+    // Read token and name from URL query
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const name = params.get('name');
+
+    document.getElementById('token').textContent = token;
+    document.getElementById('name').textContent = name;
+  </script>
+</body>
+</html>

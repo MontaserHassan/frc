@@ -14,6 +14,10 @@ import UserRepository from './repository/user.repository';
 import TokenRepository from './repository/token.repository';
 import ProfilePictureRepository from './repository/profile-picture.repository';
 import AuthGuard from 'src/Guards/auth/auth.guard';
+import GoogleStrategy from './strategies/google.strategy';
+import FacebookStrategy from './strategies/facebook.strategy';
+import LinkedinStrategy from './strategies/linkedin.strategy';
+import { SessionSerializer } from 'src/Guards/passport.serializer';
 
 
 
@@ -22,10 +26,10 @@ import AuthGuard from 'src/Guards/auth/auth.guard';
     ConfigModule.forRoot({ isGlobal: true, }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, { name: Token.name, schema: TokenSchema }, { name: ProfilePicture.name, schema: ProfilePictureSchema },]),
     JwtModule.register({ secret: process.env.JWT_SECRET }),
-    PassportModule
+    PassportModule.register({ defaultStrategy: 'jwt', session: false, }),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, TokenRepository, ProfilePictureRepository, AuthGuard],
+  providers: [UserService, UserRepository, TokenRepository, ProfilePictureRepository, SessionSerializer, GoogleStrategy, FacebookStrategy, LinkedinStrategy, AuthGuard],
   exports: [UserRepository, TokenRepository,],
 
 })

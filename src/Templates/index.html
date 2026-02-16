@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Social Login Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .google {
+      background: #db4437;
+      color: white;
+    }
+
+    .facebook {
+      background: #1877f2;
+      color: white;
+    }
+
+    .linkedin {
+      background: #0a66c2;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Test Social Login</h2>
+
+    <button class="google" onclick="login('google')">
+      Continue with Google
+    </button>
+
+    <button class="facebook" onclick="login('facebook')">
+      Continue with Facebook
+    </button>
+
+    <button class="linkedin" onclick="login('linkedin')">
+      Continue with LinkedIn
+    </button>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:7777/api/1.0/user/social';
+
+    function login(provider) {
+      window.location.href = `${API_URL}/${provider}`;
+    }
+  </script>
+
+</body>
+</html>

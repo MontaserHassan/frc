@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login Failed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f8d7da; }
+    .box { background: white; padding: 40px; border-radius: 8px; text-align: center; color: #721c24; border: 1px solid #f5c6cb; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login Failed!</h2>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message') || 'Unknown error occurred';
+    document.getElementById('message').textContent = message;
+  </script>
+</body>
+</html>

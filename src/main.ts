@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
+import * as session from 'express-session';
+import * as passport from 'passport';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as bodyParser from 'body-parser';
@@ -19,6 +21,22 @@ async function bootstrap() {
   app.setGlobalPrefix(`${Constants.API}/${Constants.VERSION}`);
   app.use(bodyParser.json({ limit: '20mb' }));
   app.enableCors({ origin: '*', credentials: true });
+
+  app.use(
+    session({
+      secret: 'linkedin-oidc-secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false, // set TRUE only if HTTPS
+        maxAge: 10 * 60 * 1000, // 10 minutes (login only)
+      },
+    }),
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.useGlobalPipes(
     new ValidationPipe({

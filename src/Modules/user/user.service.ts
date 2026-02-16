@@ -8,6 +8,8 @@ import CustomExceptionFilter from 'src/Core/Error/error-exception.error';
 import { ErrorUserMessage } from './Messages/index.message';
 import CreateUserDto from './dto/create-user.dto';
 import SignInUserDto from './dto/sign-in-user.dto';
+import SocialUserDto from './dto/social-user.dto';
+
 
 
 @Injectable()
@@ -20,12 +22,33 @@ export default class UserService {
 
   async register(createUserDto: CreateUserDto) {
     try {
-      const { email, phoneNumber } = createUserDto;
-      const isUserExisting = await this.userRepository.findOneByOr({ email, phoneNumber });
-      if (isUserExisting) throw new CustomExceptionFilter(``, HttpStatus.BAD_REQUEST, ['email', 'phoneNumber']);
+      const { email, countryCode, phoneNumber } = createUserDto;
+      let user = await this.userRepository.findOne({ email });
+      if (user) throw new CustomExceptionFilter(``, HttpStatus.BAD_REQUEST, ['email']);
+      user = await this.userRepository.findOneByAnd({ countryCode, phoneNumber });
+      if (user) throw new CustomExceptionFilter(``, HttpStatus.BAD_REQUEST, ['countryCode', 'phoneNumber']);
       createUserDto.userName = `${createUserDto.firstName} ${createUserDto.lastName}`;
       const newUser = await this.userRepository.create(createUserDto);
       return newUser;
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async addAndLoginSocialUser(socialUserDto: SocialUserDto) {
+    try {
+      const { email } = socialUserDto;
+      let user = await this.userRepository.findOneByAnd({ provider: socialUserDto.provider, providerId: socialUserDto.providerId });
+      if (!user) {
+        user = await this.userRepository.findOneByOr({ email, });
+        if (user) {
+          await this.userRepository.update(user._id.toString(), { provider: socialUserDto.provider, providerId: socialUserDto.providerId });
+        } else {
+          user = await this.userRepository.create(socialUserDto);
+        };
+      };
+      const newToken = await this.tokenUtil.createToken(user.email, user.userName, user._id.toString(),);
+      return { newToken, user };
     } catch (error) {
       throw error;
     };

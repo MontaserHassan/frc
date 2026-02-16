@@ -19,7 +19,7 @@ export default class ValidationExceptionFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
         const response = ctx.getResponse<Response>();
         const isProd = Constants.PROD;
-
+        console.log('exception: ', exception);
         if (response.headersSent) return;
 
         let status: number = HttpStatus.INTERNAL_SERVER_ERROR;

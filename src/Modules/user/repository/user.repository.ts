@@ -6,6 +6,8 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../entities/user.entity';
 import CreateUserDto from '../dto/create-user.dto';
 import FilterUserDataDto from '../dto/filter-data-user.dto';
+import SocialUserDto from '../dto/social-user.dto';
+import UpdateUserDto from '../dto/update-user.dto';
 
 
 
@@ -14,7 +16,7 @@ export default class UserRepository {
 
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { };
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto | SocialUserDto) {
     const newUser = await this.userModel.create(createUserDto);
     return newUser;
   };
@@ -42,6 +44,16 @@ export default class UserRepository {
   async findOneByOr(filterData: FilterUserDataDto) {
     const user = await this.userModel.findOne({ $or: [filterData] }).select('-__v');
     return user;
+  };
+
+  async findOneByAnd(filterData: FilterUserDataDto) {
+    const user = await this.userModel.findOne({ $and: [filterData] }).select('-__v');
+    return user;
+  };
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const updatedUser = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).select('-__v');
+    return updatedUser;
   };
 
 };
